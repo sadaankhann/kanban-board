@@ -1,9 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { IndAndVal } from './IndexAndValue';
+import {Tasks} from './Task_Board_1'
 import {InProgress} from './InProgress_Board_2'
 
 const Board_3 = () => {
 
+    const {tasks, setTasks} = useContext(Tasks);
     const {inProgress, setInProgress} = useContext(InProgress);
     const {Index, setIndex, Value, setValue} = useContext(IndAndVal);
     const [done, setDone] = useState(() => {
@@ -50,6 +52,9 @@ const Board_3 = () => {
                     setDone([...done, { title: Value.title, description: Value.description }]);
                     setValue(null);
                     setIndex(null);
+                    setTasks(tasks.filter((_, idx) => {
+                        return Index != idx;
+                    }))
                     setInProgress(inProgress.filter((_, idx) => {
                         return Index != idx;
                     }))

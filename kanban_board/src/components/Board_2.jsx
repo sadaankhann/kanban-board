@@ -59,7 +59,7 @@ const Board_2 = () => {
                         <div className='text-xl font-bold'>{elem.title}</div>
                         <div className='text-sm'>{elem.description}</div>
                         <div className='flex justify-end'><button className='bg-red-500 p-1 text-sm text-white font-bold rounded-lg' onClick={() => {
-                            setTasks(tasks.filter((_, index) => {
+                            setInProgress(inProgress.filter((_, index) => {
                                 return idx != index;
                             }))
                         }}>Delete</button></div>
