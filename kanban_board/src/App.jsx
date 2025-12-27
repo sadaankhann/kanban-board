@@ -1,34 +1,18 @@
-import React, { useEffect, useState } from 'react'
-
+import React, { useContext} from 'react'
+import Board_1 from './components/Board_1';
+import { TaskAndDiv } from './components/ShowTaskAndDiv';
+import { TaskAndDescription } from './components/AddTaskAndAddTaskDescription';
+import {Tasks} from './components/Task_Board_1'
+import Board_2 from './components/Board_2';
+import Board_3 from './components/Board_3';
 
 const App = () => {
 
-  const [onDropFlag, setOnDropFlag] = useState(false);
-  const [onDropFlag_1, setOnDropFlag_1] = useState(false);
-  const [Index, setIndex] = useState(null);
-  const [Value, setValue] = useState(null);
-  const [showTaskAddDiv, setShowTaskAddDiv] = useState(false);
-  const [tasks, setTasks] = useState(() => {
-    const data = localStorage.getItem('todo');
-    return data ? JSON.parse(data) : [];
-  });
-
-
-  const [inProgress, setInProgress] = useState(() => {
-    const data = localStorage.getItem('in_progress');
-    return data ? JSON.parse(data) : [];
-  });
-
-  const [done, setDone] = useState(() => {
-    const data = localStorage.getItem('done');
-    return data ? JSON.parse(data) : [];
-  });
-
-  const [addTask, setAddTask] = useState("");
-  const [addTaskDescription, setAddTaskDescription] = useState("");
+  const {tasks, setTasks} = useContext(Tasks);
+  const {showTaskAddDiv, setShowTaskAddDiv} = useContext(TaskAndDiv);
+  const {addTask, setAddTask, addTaskDescription, setAddTaskDescription} = useContext(TaskAndDescription);
 
   const formSubmitted = (e) => {
-
 
     setShowTaskAddDiv(false);
 
@@ -37,20 +21,6 @@ const App = () => {
     setAddTask("");
     setAddTaskDescription("");
   }
-
-  // Fetching Local Storage Data
-
-  useEffect(() => {
-    localStorage.setItem('todo', JSON.stringify(tasks));
-  }, [tasks])
-
-  useEffect(() => {
-    localStorage.setItem('in_progress', JSON.stringify(inProgress));
-  }, [inProgress])
-
-  useEffect(() => {
-    localStorage.setItem('done', JSON.stringify(done));
-  }, [done])
 
   return (
     <>
@@ -90,135 +60,10 @@ const App = () => {
         {/* app body */}
 
         <div className="flex h-[500px] gap-4 mt-5 p-5 ">
-          <div className="flex flex-col board-1 flex-1 bg-[#444] w-[30%] justify-between rounded-lg p-2">
-
-            <div className="flex justify-between items-center w-[100%] h-[10%]">
-
-              <div>Todo</div>
-              <div>{tasks.length}</div>
-
-            </div>
-
-            <div className="flex flex-col h-full w-full gap-3">
-
-              {tasks.map((elem, idx) => {
-                return <div key={idx} className="--tasks h-[25%] w-full rounded-lg bg-black text-white p-2 hover:scale-95 hover:transition-transform duration-300" draggable="true" onDragStart={() => {
-                  setIndex(idx);
-                  setValue(elem);
-                  console.log(elem);
-                }}>
-                  <div className='text-xl font-bold'>{elem.title}</div>
-                  <div className='text-sm'>{elem.description}</div>
-                  <div className='flex justify-end'><button className='bg-red-500 p-1 text-sm text-white font-bold rounded-lg' onClick={()=>{
-                    setTasks(tasks.filter((_, index)=>{
-                      return idx != index;
-                    }))
-                  }}>Delete</button></div>
-
-                </div>
-              })}
-
-            </div>
-
-          </div>
-          <div className={`flex flex-col board-2 flex-1 bg-[#444] w-[30%] justify-between rounded-lg p-2 ${(onDropFlag) ? 'border-2 border-dashed scale-105 transition-transform duration-300' : 'border-none'}`}>
-
-            <div className="flex justify-between items-center w-[100%] h-[10%] mb-4">
-
-              <div>In-Progress</div>
-              <div>{inProgress.length}</div>
-
-            </div>
-
-            <div className="flex flex-col h-full w-full gap-4" draggable='true' onDragOver={(e) => {
-              e.preventDefault();
-              setOnDropFlag(true)
-            }}
-
-            onDragLeave={()=>{
-              setOnDropFlag(false);
-            }}
-
-            onDrop={() => {
-
-              setOnDropFlag(false);
-
-              const alreadyExists = inProgress.some(
-                (t) => t.title === Value.title && t.description === Value.description
-              );
-
-              if(alreadyExists){
-                setValue(null);
-                setIndex(null);
-                return;
-              }
-
-              setInProgress([...inProgress, Value]);
-
-              setValue(null);
-              setIndex(null);
-              setTasks(tasks.filter((_, idx) => {
-                return idx != Index;
-              }))
-            }}>
-              {inProgress.map((elem, idx) => {
-                return <div key={idx} className="--tasks h-[25%] w-full rounded-lg bg-black text-white p-2 hover:scale-95 hover:transition-transform duration-300" draggable onDragStart={() => {
-                  setValue(elem);
-                  setIndex(idx);
-                }}>
-                  <div className='text-xl font-bold'>{elem.title}</div>
-                  <div className='text-sm'>{elem.description}</div>
-                  <div className='flex justify-end'><button className='bg-red-500 p-1 text-sm text-white font-bold rounded-lg' onClick={()=>{
-                    setInProgress(inProgress.filter((_, index)=>{
-                      return idx != index;
-                    }))
-                  }}>Delete</button></div>
-                </div>
-              })}
-            </div>
-
-          </div>
-          <div className={`flex flex-col board-3 flex-1 bg-[#444] w-[30%] justify-between rounded-lg p-2 ${(onDropFlag_1) ? 'border-2 border-dashed scale-105 transition-transform duration-300' : 'border-none'}`}>
-            <div className="flex justify-between items-center w-[100%] h-[10%] mb-4 mt-4">
-
-              <div>Done</div>
-              <div>{done.length}</div>
-
-            </div>
-
-            <div className="flex flex-col h-full w-full gap-3" onDragOver={(e) => {
-              e.preventDefault();
-              setOnDropFlag_1(true);
-            }} 
-
-            onDragLeave={()=>{
-              setOnDropFlag_1(false);
-            }}
-            
-            onDrop={() => {
-              setDone([...done, { title: Value.title, description: Value.description }]);
-              setValue(null);
-              setIndex(null);
-              setInProgress(inProgress.filter((_, idx) => {
-                return Index != idx;
-              }))
-              setOnDropFlag_1(false);
-            }}>
-              {done.map((elem, idx) => {
-                return <div key={idx} className="--tasks h-[25%] w-full rounded-lg bg-black text-white p-2 hover:scale-95 hover:transition-transform duration-300">
-                  <div className='text-xl font-bold'>{elem.title}</div>
-                  <div className='text-sm'>{elem.description}</div>
-                  <div className='flex justify-end'><button className='bg-red-500 p-1 text-sm text-white font-bold rounded-lg' onClick={()=>{
-                    setDone(done.filter((_, index)=>{
-                      return idx != index;
-                    }))
-                  }}>Delete</button></div>
-                </div>
-              })}
-            </div>
-
-
-          </div>
+         
+         <Board_1/>
+         <Board_2/>
+         <Board_3/>
         </div>
 
       </div>

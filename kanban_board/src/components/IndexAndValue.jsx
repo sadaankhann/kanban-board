@@ -1,18 +1,16 @@
-import React, { createContext } from 'react'
+import React, { createContext, useState } from 'react';
 
-export const IndAndVal = createContext('IndexAVal');
+export const IndAndVal = createContext(null);
 
-const IndexAndValue = () => {
+const IndAndVal_ = ({ children }) => {
+  const [Index, setIndex] = useState(null);
+  const [Value, setValue] = useState(null);
 
-    const [Index, setIndex] = useState(null);
-    const [Value, setValue] = useState(null);
-    return (
-        <IndAndVal.Provider value={{Index, setIndex, Value, setValue}}>
-        <div>
+  return (
+    <IndAndVal.Provider value={{ Index, setIndex, Value, setValue }}>
+      {children}
+    </IndAndVal.Provider>
+  );
+};
 
-        </div>
-        </IndAndVal.Provider>
-    )
-}
-
-export default IndexAndValue
+export default IndAndVal_
