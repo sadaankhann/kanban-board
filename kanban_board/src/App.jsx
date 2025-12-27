@@ -25,19 +25,19 @@ const App = () => {
   return (
     <>
 
-      <div className={`${showTaskAddDiv === true ? 'flex' : 'hidden'} flex-col h-[200px] w-[250px] rounded-lg absolute z-[999] bg-red-400 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 justify-center items-center`} onClick={() => {
+      <div className={`${showTaskAddDiv === true ? 'flex' : 'hidden'} flex-col h-[200px] w-[250px] rounded-lg absolute z-[999] bg-black text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 justify-center items-center pl-4 overflow-hidden`} onClick={() => {
 
       }}>
         <form onSubmit={(e) => {
           formSubmitted(e);
         }}>
-          <input value={addTask} type="text" required className='p-2 w-[80%] h-[30%]' placeholder='Enter Task' onChange={(e) => {
+          <input value={addTask} type="text" required className='p-2 w-[80%] h-[30%] outline-none bg-[#333]' placeholder='Enter Task' onChange={(e) => {
             setAddTask(e.target.value);
           }} />
-          <textarea value={addTaskDescription} required name="" id="" className='p-2' placeholder='Enter Task Description' onChange={(e) => {
+          <textarea value={addTaskDescription} required name="" id="" className='p-2 outline-none bg-[#333] mt-2' placeholder='Enter Task Description' onChange={(e) => {
             setAddTaskDescription(e.target.value);
           }}></textarea>
-          <button type='submit' className='block p-2 rounded-lg bg-[#444] text-white font-bold mt-3'>Add Task</button>
+          <button type='submit' className='block p-2 rounded-lg bg-[#333] text-white font-bold'>Add Task</button>
         </form>
       </div>
 
